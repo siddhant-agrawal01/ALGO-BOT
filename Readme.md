@@ -134,15 +134,7 @@ The bot is currently configured for **testnet** (paper trading):
 bot = BasicBot(api_key, api_secret, testnet=True)
 ```
 
-### Switching to Live Trading
 
-⚠️ **WARNING**: Only switch to live trading after thorough testing!
-
-Change `testnet=True` to `testnet=False` in `main.py`:
-
-```python
-bot = BasicBot(api_key, api_secret, testnet=False)
-```
 
 ## Monitoring and Logs
 
@@ -224,16 +216,7 @@ trading-bot/
 └── __pycache__/     # Python cache (auto-generated)
 ```
 
-## Extending the Bot
 
-The bot can be extended with:
-
-- Automated trading strategies
-- Technical indicators
-- Portfolio management
-- Risk management features
-- Multiple symbol trading
-- WebSocket real-time data
 
 ## Support
 
@@ -241,16 +224,4 @@ The bot can be extended with:
 - Review Binance API documentation
 - Ensure all dependencies are installed correctly
 
-## Disclaimer
 
-⚠️ **Important**:
-
-- This bot is for educational purposes
-- Trading involves significant risk
-- Past performance doesn't guarantee future results
-- Use at your own risk
-- Always test thoroughly on testnet before live trading
-
----
-
-**Last Updated**: July 27, 2025
