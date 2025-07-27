@@ -1,43 +1,44 @@
-# Save these values right now. They won't be shown ever again!
 
-# API Key: 4r7dyUKMVhY9e67fEs6eviEnzC8mBWidxj0mM93XPmhViBRyCuN2fKiO6OuVMxcL
+import os
+from dotenv import load_dotenv
+from bot import BasicBot
+from binance.enums import *
 
-# Secret Key: Id3O0zl8iaPlezo1R2T3i0bcYOfx4MzxV0EZPODcyCwqJ8DL6wybJb8lRCjtB7Rc 
+load_dotenv()
 
-from binance.client import Client
-import time
+api_key = 'd5b5b1cd35ed73bf52c930ebcc69c807c5ad5abef192a37dc97c4e96ccf9ca52'
+api_secret = '70f19d43bd8149c08c6bb3e690067292c0251ef40441be2c21efdd4c311766b2'
 
+bot = BasicBot(api_key, api_secret, testnet=True)
 
-API_KEY='4r7dyUKMVhY9e67fEs6eviEnzC8mBWidxj0mM93XPmhViBRyCuN2fKiO6OuVMxcL'
+def ask_order_details():
+    symbol = input("Enter symbol (e.g., BTCUSDT): ").strip().upper()
+    side = input("Enter side (BUY/SELL): ").strip().upper()
+    order_type = input("Enter order type (MARKET/LIMIT): ").strip().upper()
+    quantity = float(input("Enter quantity: "))
 
-SECRET_KEY= 'Id3O0zl8iaPlezo1R2T3i0bcYOfx4MzxV0EZPODcyCwqJ8DL6wybJb8lRCjtB7Rc'
+    price = None
+    if order_type == "LIMIT":
+        price = float(input("Enter limit price: "))
 
-client = Client(API_KEY, SECRET_KEY,testnet='true')
+    return symbol, side, order_type, quantity, price
 
-account_status=client.get_account()
-print(account_status)
+if __name__ == "__main__":
+    symbol, side, order_type, quantity, price = ask_order_details()
 
-symbol = 'BTCUSDT'
-buy_price_threshold = 100000
-sell_price_threshold = 120000
-trade_quantity = 0.001 
+    print(f"\n Placing {order_type} {side} order for {symbol} with qty={quantity}, price={price}\n")
 
-def get_current_price(symbol):
-    ticker = client.get_symbol_ticker(symbol=symbol)
-    return float(ticker['price'])
+    order = bot.place_order(
+        symbol=symbol,
+        side=SIDE_BUY if side == "BUY" else SIDE_SELL,
+        order_type=order_type,
+        quantity=quantity,
+        price=price
+    )
 
-get_current_price(symbol)
-
-def place_buy_order(symbol, quantity):
-    try:
-        order = client.order_market_buy(
-            symbol=symbol,
-            quantity=quantity
-        )
-        print(f"Buy order placed: {order}")
-    except Exception as e:
-        print(f"Error placing buy order: {e}")
-
-place_buy_order(symbol, trade_quantity)
-
-
+    if order:
+        print("Order placed successfully!")
+        print("Order ID:", order['orderId'])
+        print("Status:", order['status'])
+    else:
+        print(" Failed to place order. Check log.txt for more details.")
